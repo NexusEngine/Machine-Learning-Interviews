@@ -25,14 +25,14 @@ Below are the most important topics to cover:
   - Linear vs Nonlinear algorithms
 ### Supervised learning
   - Linear Algorithms
-    - Linear regression
+    - Linear regression ([detailed explanation](./linear_regression.md))
       - least squares, residuals,  linear vs multivariate regression
-    - Logistic regression
+    - Logistic regression ([detailed explanation](./logistic_regression.md))
       - cost function (equation, code),  sigmoid function, cross entropy
     - Support Vector Machines
     - Linear discriminant analysis
 
-  - Decision Trees
+  - Decision Trees ([detailed explanation](./decision_trees.md))
     - Logits
     - Leaves
     - Training algorithm
@@ -40,7 +40,7 @@ Below are the most important topics to cover:
     - Inference
     - Pruning
 
-  - Ensemble methods
+  - Ensemble methods ([detailed explanation](./ensemble_methods.md))
     - Bagging and boosting methods (with examples)
     - Random Forest
     - Boosting

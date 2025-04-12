@@ -1,12 +1,13 @@
 # <a name="ml-sys"></a>  Machine Learning System Design
 
-||
-| --- |
-| 1. [The 9-Step ML System Design Formula](#1-the-9-step-ml-system-design-formula-template) |
-| 2. [ML System Design Sample Questions](#2-ml-system-design-sample-questions) |
-|3. [ML System Design Topics](#3-ml-system-design-topics)|
-|4. [ML at big tech companies](#4-ml-at-big-tech-companies)|
-||
+
+|                                                                                          |
+| ------------------------------------------------------------------------------------------ |
+| 1.[The 9-Step ML System Design Formula](#1-the-9-step-ml-system-design-formula-template) |
+| 2.[ML System Design Sample Questions](#2-ml-system-design-sample-questions)              |
+| 3.[ML System Design Topics](#3-ml-system-design-topics)                                  |
+| 4.[ML at big tech companies](#4-ml-at-big-tech-companies)                                |
+|                                                                                          |
 
 ### Designing ML systems for production
 
@@ -16,18 +17,17 @@ Deploying deep learning models in production can be challenging, and it is beyon
 <img src="../imgs/components.png" title="" width="90%" height="80%">
 </p>
 
-
 Approaching an ML system design problem follows a similar logical flow to the generic software system design. (
 For more insight on general system design interview you can e.g. check out [Grokking the System Design Interview
 ](https://www.educative.io/courses/grokking-the-system-design-interview)
 and [System design primer](https://github.com/donnemartin/system-design-primer).). However, there are certain components in the design of an ML based system that needs to be addressed and need special attention, as you will see below in ML System Design Flow.
 
-### ML System Design Interview 
+### ML System Design Interview
 
 - In an ML system design interview you are exposed to open ended questions with no single correct answer.
 - The goal of ML system design interview is evaluate your your ability to zoom out and design a production-level ML system that can be deployed as a service within a company's ML infrastructure.
 
-# 1. The 9-Step ML System Design Formula ([Template](./mlsd-template.md)) 
+# 1. The 9-Step ML System Design Formula ([Template](./mlsd-template.md))
 
 In order to design a solid ML system for real world applications, it is important to follow a design flow.
 I recommend using the following **9-Step ML System Design Formula**to design SW system solutions for ML-relevant business problems both at work and during interviews:
@@ -38,66 +38,85 @@ I recommend using the following **9-Step ML System Design Formula**to design SW 
 
 <center>
 
-| | |
-| --- | ---|
-| Step 1| [Problem Formulation](#1-problem-formulation) |
-| Step 2 |[Metrics (Offline and Online)](#2-metrics-offline-and-online) |
-| Step 3 |[Architectural Components (MVP Logic)](#3-architectural-components-mvp-logic)|
-| Step 4 |[Data Collection and Preparation](#4-data-collection-and-preparation) |
-| Step 5 |[Feature Engineering](#5-feature-engineering) |
-| Step 6 |[Model Development and Offline Evaluation](#6-model-development-and-offline-evaluation) |
-| Step 7 |[Prediction Service](#7-prediction-service) |
-| Step 8 |[Online Testing and Deployment](#8-online-testing-and-model-deployment)  |
-| Step 9 |[Scaling, Monitoring, and Updates](#9-scaling-monitoring-and-updates) |
-| | |
+
+|        |                                                                                         |
+| -------- | ----------------------------------------------------------------------------------------- |
+| Step 1 | [Problem Formulation](#1-problem-formulation)                                           |
+| Step 2 | [Metrics (Offline and Online)](#2-metrics-offline-and-online)                           |
+| Step 3 | [Architectural Components (MVP Logic)](#3-architectural-components-mvp-logic)           |
+| Step 4 | [Data Collection and Preparation](#4-data-collection-and-preparation)                   |
+| Step 5 | [Feature Engineering](#5-feature-engineering)                                           |
+| Step 6 | [Model Development and Offline Evaluation](#6-model-development-and-offline-evaluation) |
+| Step 7 | [Prediction Service](#7-prediction-service)                                             |
+| Step 8 | [Online Testing and Deployment](#8-online-testing-and-model-deployment)                 |
+| Step 9 | [Scaling, Monitoring, and Updates](#9-scaling-monitoring-and-updates)                   |
+|        |                                                                                         |
 
 </center>
 
-Note: Remember when using this design flow during an interview to be flexible. According to the needs of the interview or the interests of the interviewer, you may skip some of these components or spend more time for a deep dive in one or two components.  
+Note: Remember when using this design flow during an interview to be flexible. According to the needs of the interview or the interests of the interviewer, you may skip some of these components or spend more time for a deep dive in one or two components.
 
 ## 1. Problem Formulation
 
 - Clarifying questions
 - Use case(s) and business goal
 - Requirements
+
   - Scope (features needed), scale, and personalization
   - Performance: prediction latency, scale of prediction
   - Constraints
-  - Data: sources and availability  
+  - Data: sources and availability
 - Assumptions
-
 - Translate an abstract problem into an ML problem
+
   - ML objective,
   - ML I/O,
   - ML category (e.g.  binary classification, multi-classification, unsupervised learning, etc)
 - Do we need ML to solve this problem?
+
   - Trade off between impact and cost
     - Costs: Data collection, data annotation, compute
-    - if Yes, we choose an ML system to design. If No, follow a general system design flow.  
+    - if Yes, we choose an ML system to design. If No, follow a general system design flow.
     - Note: in an ML system design interview we can assume we need ML.
 
 ## 2. Metrics (Offline and Online)
 
-- Offline metrics (e.g. classification, relevance metrics)  
+- Offline metrics (e.g. classification, relevance metrics)
   - Classification metrics
-    - Precision, Recall, F1, ROC AUC, P/R AUC, mAP, log-loss, etc
+    - Precision
+    - Recall
+    - F1
+    - ROC AUC
+    - P/R AUC
+    - mAP
+    - log-loss
       - Imbalanced data
   - Retrieval and ranking metrics
-    - Precision@k, Recall@k (do not consider ranking quality)
-    - mAP, MRR, nDCG
-  - Regression metrics: MSE, MAE, 
+    - Precision@k
+    - Recall@k (do not consider ranking quality)
+    - mAP
+    - MRR
+    - nDCG
+  - Regression metrics
+    - MSE
+    - MAE
   - Problem specific metrics
-    - Language: BLEU, BLEURT, GLUE, ROUGE, etc 
-    - ads: CPE, etc  
+    - Language
+      - BLEU
+      - BLEURT
+      - GLUE
+      - ROUGE
+    - ads
+      - CPE
   - Latency
   - Computational cost (in particular for on-device)
 - Online metrics
   - CTR
   - Task/session success/failure rate,
-  - Task/session total (e.g. watch) times, 
+  - Task/session total (e.g. watch) times,
   - Engagement rate (like rate, comment rate)
   - Conversion rate
-  - Revenue lift 
+  - Revenue lift
   - Reciprocal rank of first click, etc,
   - Counter metrics: direct negative feedback (hide, report)
 - Trade-offs b/w metrics
@@ -109,16 +128,14 @@ Note: Remember when using this design flow during an interview to be flexible. A
     - user, app server, DBs, KGs, etc and their interactions
   - ML components:
     - Modeling modules (e.g. candidate generator, ranker, ect)
-    - Train data generator  
-    ... 
+    - Train data generator
+      ...
 - Modular architecture design
-    - Model 1 architecture  (e.g. candidate generation)
-    - Model 2 architecture (e.g. ranker, filter)
-    - ...
+  - Model 1 architecture  (e.g. candidate generation)
+  - Model 2 architecture (e.g. ranker, filter)
+  - ...
 
-
-
-## 4. Data Collection and Preparation  
+## 4. Data Collection and Preparation
 
 - Data needs
   - target variable
@@ -129,7 +146,7 @@ Note: Remember when using this design flow during an interview to be flexible. A
   - implicit (logging), explicit (e.g. user survey)
 - Data storage
 - ML Data types
-  - structured 
+  - structured
     - numerical (discrete, continuous)
     - categorical (ordinal, nominal),
   - unstructured(e.g. image, text, video, audio)
@@ -146,13 +163,30 @@ Note: Remember when using this design flow during an interview to be flexible. A
     - Weak supervision (encode heuristics e.g. keywords, regex, db, output of other ML models)
   - Transfer learning:
     - pre-train on cheap large data (e.g. GPT-3),
-    - zero-shot or fine-tune for downstream task  
+    - zero-shot or fine-tune for downstream task
   - Active learning
   - Labeling cost and trade-offs
 - Data augmentation
-- Data Generation Pipeline 
+  - Synthetic data
+    - Generative models (GANs, VAEs, Diffusion models)
+    - Rule-based generation (templates, grammars)
+    - Simulation-based approaches (physics engines, game engines)
+    - Adversarial example generation
+    - Text generation using LLMs (prompting, fine-tuning)
+    - Knowledge distillation from larger models
+    - Bootstrapping from existing datasets
+    - Hybrid human-AI generation pipelines
+  - Augmented data  
+    - Image: rotation, flipping, cropping, color jittering, noise addition, cutout/mixup
+    - Text: synonym replacement, back-translation, random insertion/deletion/swap
+    - Audio: time stretching, pitch shifting, adding background noise, speed perturbation
+    - Video: frame skipping, temporal cropping, spatial transformations
+    - Tabular: SMOTE, ADASYN, random oversampling, feature perturbation
+    - Time series: window warping, magnitude warping, time warping, jittering
+    - Multi-modal: cross-modal augmentation, consistency-based augmentation
+- Data Generation Pipeline
   - Data collection/ingestion (offline, online)
-  - Feature generation (next)
+  - Feature generation
   - Feature transform
   - Label generation
   - Joiner
@@ -162,8 +196,8 @@ Note: Remember when using this design flow during an interview to be flexible. A
 - Choosing features
   - Define big actors (e.g. user, item, document, query, ad, context),
   - Define actor specific features (current, historic)
-    - Example user features: user profile, user history, user interests 
-    - Example text features: n-grams (uni,bi), intent, topic, frequency, length, embeddings   
+    - Example user features: user profile, user history, user interests
+    - Example text features: n-grams (uni,bi), intent, topic, frequency, length, embeddings
   - Define cross features (e.g. user-item, or query-document features)
     - Example query-document features: tf-idf
     - Example user-item features: user-video watch history, user search history, user-ad interactions(view, like)
@@ -177,80 +211,96 @@ Note: Remember when using this design flow during an interview to be flexible. A
   - Encoding categorical features (one hot, ordinal, count, etc)
   - Positional embeddings
   - Scaling/Normalization (for numerical features)
-- Preprocessing features 
-  - Needed for unstructured data 
+- Preprocessing features
+  - Needed for unstructured data
     - Text: Tokenize (Normalize, pre-tokenize, tokenizer model (ch/word/subword level), post-process (add special tokens))
     - Images: Resize, normalize
     - Video: Decode frames, sample, resize, scale and normalize
 - Missing Values
 - Feature importance
 - Featurizer (raw data -> features)
-- Static (from feature store) vs dynamic (computed online) features 
-  
+- Static (from feature store) vs dynamic (computed online) features
+
 ## 6. Model Development and Offline Evaluation
 
 - Model selection (MVP)
+
   - Heuristics -> simple model -> more complex model -> ensemble of models
+
     - Pros and cons, and decision
     - Note: Always start as simple as possible (KISS) and iterate over
+
     <!-- - More on Model Selection (TODO) -->
-  - Typical modeling choices: 
-    - Logistic Regression 
+  - Typical modeling choices:
+
+    - Logistic Regression
     - Decision tree variants
-      - GBDT (XGBoost) and RF 
+      - GBDT (XGBoost) and RF
+
     <!-- - SVM -->
-    - Neural networks 
-      - FeedForward 
+
+    - Neural networks
+      - FeedForward
       - CNN
-      - RNN 
+      - RNN
       - Transformers
-  - Decision Factors 
-    - Complexity of the task 
-    - Data: Type of data (structured, unstructured), amount of data, complexity of data 
-    - Training speed 
-    - Inference requirements: compute, latency, memory 
-    - Continual learning  
-    - Interpretability 
+  - Decision Factors
+
+    - Complexity of the task
+    - Data: Type of data (structured, unstructured), amount of data, complexity of data
+    - Training speed
+    - Inference requirements: compute, latency, memory
+    - Continual learning
+    - Interpretability
   - [Popular NN architectures](./mlsd-modeling-popular-archs.md)
-    
-- Dataset 
+- Dataset
+
   - Sampling
+
     - Non-probabilistic sampling
     - Probabilistic sampling methods
       - random, stratified, reservoir, importance sampling
   - Data splits (train, dev, test)
+
     - Portions
     - Splitting time-correlated data (split by time)
-      - seasonality, trend  
+      - seasonality, trend
     - Data leakage:
       - scale after split,
       - use only train split for stats, scaling, and missing vals
+  - Class Imbalance
 
-  - Class Imbalance 
     - Resampling
     - weighted loss fcn
-    - combining classes  
+    - combining classes
+- Model training
 
-- Model training 
-  - Loss functions 
-    - MSE, Binary/Categorical CE, MAE, Huber loss, Hinge loss, Contrastive loss, etc
+  - Loss functions
+
+    - MSE
+    - Binary/Categorical CE
+    - MAE
+    - Huber loss
+    - Hinge loss
+    - Contrastive loss, etc
   - Optimizers
+
     - SGD, AdaGrad, RMSProp, Adam, etc
-  - Model training 
-    - Training from scratch or fine-tune  
-  - Model validation  
+  - Model training
+
+    - Training from scratch or fine-tune
+  - Model validation
   - Debugging <!-- - More on Debugging (TODO) -->
-  - Offline vs online training  
-
+  - Offline vs online training
   - Model offline evaluation
+  - Hyper parameter tuning
 
-  - Hyper parameter tuning 
-    - Grid search 
-
+    - Grid search
   - Iterate over MVP model
-      - Model Selection
-      - Data augmentation
-      - Model update frequency
+
+    - Model Selection
+    - Data augmentation
+    - Model update frequency
   - Model calibration
 
 ## 7. Prediction Service
@@ -263,11 +313,11 @@ Note: Remember when using this design flow during an interview to be flexible. A
   - Online: predict as request arrives - low latency
   - Hybrid: e.g. Netflix: batch for titles, online for rows
 - Nearest Neighbor Service
-  - Approximate NN 
-    - Tree based, LSH, Clustering based 
+  - Approximate NN
+    - Tree based, LSH, Clustering based
 - ML on the Edge (on-device AI)
   - Network connection/latency, privacy, cheap
-  - Memory, compute power, energy constraints  
+  - Memory, compute power, energy constraints
   - Model Compression
     - Quantization
     - Pruning
@@ -291,14 +341,14 @@ Note: Remember when using this design flow during an interview to be flexible. A
   - Scaling general SW system (distributed servers, load balancer, sharding, replication, caching, etc)
     - Train data / KB partitioning
   - Scaling ML system
-    - Distributed ML 
+    - Distributed ML
       - Data parallelism (for training)
       - Model parallelism (for training, inference)
-        - Asynchronous SGD 
-        - Synchronous SGD 
+        - Asynchronous SGD
+        - Synchronous SGD
     - [Distributed training]()
-      - Data parallel DT, RPC based DT   
-    - Scaling data collection 
+      - Data parallel DT, RPC based DT
+    - Scaling data collection
       - [MT for 1000 languages](https://arxiv.org/abs/2205.03983)
       - [NLLB](https://research.facebook.com/publications/no-language-left-behind/)
     - Monitoring, failure tolerance, updating (below)
@@ -309,7 +359,7 @@ Note: Remember when using this design flow during an interview to be flexible. A
   - Monitoring metrics
     - SW system metrics
     - ML metrics (accuracy related, predictions, features)
-      - Online and offline metric dashboards  
+      - Online and offline metric dashboards
   - Monitoring data distribution shifts
     - Types: Covariate, label and concept shifts
     - Detection (stats, hypothesis testing)
@@ -328,44 +378,51 @@ Note: Remember when using this design flow during an interview to be flexible. A
   - Model updates
     - train from scratch or a base model
     - how often? daily, weekly, monthly, etc
-  - Auto update models 
-  - Active learning 
-  - Human in the loop ML  
+  - Auto update models
+  - Active learning
+  - Human in the loop ML
 
 ### Other topics:
 
-- Extensions: 
-  - Iterations over the base design to add a new functional feature 
+- Extensions:
+  - Iterations over the base design to add a new functional feature
 - Bias in training data
-  - Bias introduced by human labeling 
+  - Bias introduced by human labeling
 - Freshness, Diversity
-- Privacy and security 
+- Privacy and security
 
+# 2. ML System Design Sample Questions
 
-# 2. ML System Design Sample Questions 
-Below are the most common ML system design questions for ML engineering interviews: 
+Below are the most common ML system design questions for ML engineering interviews:
 
 ### Recommendation Systems
+
 - **[Video/Movie recommendation](./mlsd-video-recom.md)**(Netflix, Youtube)
 - **[Friends / follower recommendation](./mlsd-pymk.md)**(Facebook, Twitter, LinkedIn)
 - **[Event recommendation system](./mlsd-event-recom.md)** (Eventbrite)
 - **[Game recommendation](./mlsd-game-recom.md)**
 - **Replacement product recommendation** (Instacart)
 - **Rental recommendation** (Airbnb)
-- **Place recommendation** 
-  
+- **Place recommendation**
+
 ### Search systems (retrieval, ranking)
-  - **Document search**
-    - **[Text query search](./mlsd-search.md)** (full text, semantic), 
-    - **[Image/Video search](./mlsd-image-search.md)**, 
-    - **[Multimodal search](./mlsd-mm-video-search.md)** (MM Query)
-    <!-- - Semantic Search system  -->
-### Ranking systems 
-- **[Newsfeed system](./mlsd-newsfeed.md)** (ranking)  
+
+- **Document search**
+
+  - **[Text query search](./mlsd-search.md)** (full text, semantic),
+  - **[Image/Video search](./mlsd-image-search.md)**,
+  - **[Multimodal search](./mlsd-mm-video-search.md)** (MM Query)
+
+  <!-- - Semantic Search system  -->
+
+### Ranking systems
+
+- **[Newsfeed system](./mlsd-newsfeed.md)** (ranking)
 - **Ads serving system** (retrieval, ranking)
   - **[Ads click prediction](./mlsd-ads-ranking.md)** (ranking)
 
-### NLP 
+### NLP
+
 - **Named entity linking system (NLP tagging, reasoning)**
 - **Autocompletion / typeahead suggestion system**
 - **Sentiment analysis system**
@@ -374,116 +431,133 @@ Below are the most common ML system design questions for ML engineering intervie
 - **[Question answering system]()**
 
 ### CV
-  - **Image blurring system**
-  - **OCR/Text recognition system** 
-  
-### AV 
+
+- **Image blurring system**
+- **OCR/Text recognition system**
+
+### AV
+
 - **Self-driving car**
   - Perception, Prediction, and Planning
   - [Pedestrian jaywalking detection](./mlsd-av.md)
 - **Ride matching system**
 
 ## Other
+
 - **Proximity service / Yelp**
 - **Food delivery time  approximation**
 - **Harmful content / Spam detection system**
-  - [Multimodal harmful content detection](./mlsd-harmful-content.md)  
+  - [Multimodal harmful content detection](./mlsd-harmful-content.md)
   - Fraud detection system
 - **Healthcare diagnosis system**
 
-
-
-# 3. ML System Design Topics 
+# 3. ML System Design Topics
 
 I observed there are certain sets of topics that are frequently brought up or can be used as part of the logic of the system. Here are some of the important ones:
 
 ### Recommendation Systems
 
-- Candidate generation 
+- Candidate generation
   - Collaborative Filtering (CF)
     - User based, item based
     - Matrix factorization
     - Two-tower approach
   - Content based filtering
-- Ranking 
+- Ranking
 - Learning to rank (LTR)
-  - point-wise (simplest), pairwise, list-wise 
+  - point-wise (simplest), pairwise, list-wise
 
 ### Search and Ranking (Ads, newsfeed, etc)
 
-- Search systems 
-  - Query search (keyword search, [semantic search](https://txt.cohere.ai/what-is-semantic-search/?utm_source=linkedin&utm_medium=paidsocial&utm_campaign=contentpromotion_bloglookalikes)) 
-  - Visual search 
-  - Video search 
-  - Two stage model 
-    - document selection
-    - document ranking 
-- Ranking 
-  - Newsfeed ranking system
-  - Ads ranking system 
-  <!-- - Ranking by relevance -->
-  - Ranking as classification 
-  - Multi-stage ranking + blender + filter
-  <!-- - Information Retrieval -->
+- Search systems
 
+  - Query search (keyword search, [semantic search](https://txt.cohere.ai/what-is-semantic-search/?utm_source=linkedin&utm_medium=paidsocial&utm_campaign=contentpromotion_bloglookalikes))
+  - Visual search
+  - Video search
+  - Two stage model
+    - document selection
+    - document ranking
+- Ranking
+
+  - Newsfeed ranking system
+  - Ads ranking system
+
+  <!-- - Ranking by relevance -->
+
+  - Ranking as classification
+  - Multi-stage ranking + blender + filter
+
+  <!-- - Information Retrieval -->
 
 ### NLP
 
-- Feature engineering 
+- Feature engineering
+
   - Preprocessing (tokenization)
 - Text Embeddings
+
   - Word2Vec, GloVe, Elmo, BERT
 - NLP Tasks:
+
   - Text classification
+
     - Sentiment analysis
     - Topic modeling
-  - Sequence tagging  
+  - Sequence tagging
+
     - Named entity recognition
     - Part of speech tagging
       - POS HMM
       - Viterbi algorithm, beam search
-  - Text generation 
-    - Language modeling
-      - N-grams vs deep learning models (trade-offs)
-      <!-- - Out of vocabulary problem -->
-      - Decoding
+  - Text generation
 
+    - Language modeling
+
+      - N-grams vs deep learning models (trade-offs)
+
+      <!-- - Out of vocabulary problem -->
+
+      - Decoding
   - Sequence 2 Sequence models
+
     - Machine Translation
       - Seq2seq models, NMT, Transformers
-  - Question Answering 
+  - Question Answering
   - [Adv] Dialog and chatbots
-      - [CMU lecture on chatbots](http://tts.speech.cs.cmu.edu/courses/11492/slides/chatbots_shrimai.pdf)
-      - [CMU lecture on spoken dialogue systems](http://tts.speech.cs.cmu.edu/courses/11492/slides/sds_components.pdf)
-  
+
+    - [CMU lecture on chatbots](http://tts.speech.cs.cmu.edu/courses/11492/slides/chatbots_shrimai.pdf)
+    - [CMU lecture on spoken dialogue systems](http://tts.speech.cs.cmu.edu/courses/11492/slides/sds_components.pdf)
 - Speech Recognition Systems
-    - Feature extraction, MFCCs
-    - Acoustic modeling
-      - HMMs for AM
-      - CTC algorithm (advanced)
+
+  - Feature extraction, MFCCs
+  - Acoustic modeling
+    - HMMs for AM
+    - CTC algorithm (advanced)
 
 ### Computer Vision
 
 - Image classification
   - VGG, ResNET
-- [Object detection](https://viso.ai/deep-learning/object-detection/) 
+- [Object detection](https://viso.ai/deep-learning/object-detection/)
   - Two stage models (R-CNN, Fast R-CNN, Faster R-CNN)
   - One stage models  (YOLO, SSD)
   - [Vision Transformer (ViT)](https://viso.ai/deep-learning/vision-transformer-vit/)
-  - NMS algorithm 
+  - NMS algorithm
 - Object Tracking
+
 <!-- - Popular architectures (AlexNet, VGG, ResNET, R-CNN, YOLO) -->
- 
+
 ### Graph problems
-- People you may know 
+
+- People you may know
+
 <!-- ### Personalization -->
 
-
-# 4. ML at big tech companies  
+# 4. ML at big tech companies
 
 Once you learn about the basics, I highly recommend checking out different companies blogs on ML systems. You can refer to some of those resources in the [ML at Companies](ml-comapnies.md) section.
 
-# More resources 
+# More resources
 
 - For more insight on different components above you can check out the following resources):
   - [Full Stack Deep Learning course](https://fall2019.fullstackdeeplearning.com/)
