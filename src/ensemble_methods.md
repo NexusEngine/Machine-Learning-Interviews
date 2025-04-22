@@ -40,6 +40,65 @@ Random Forest is a specific implementation of bagging that uses decision trees a
    - Minimum samples for split/leaf
    - Maximum features to consider per split ($\sqrt{p}$ for classification, $p/3$ for regression where $p$ is total features)
 
+**Algorithm:**
+```
+RANDOM_FOREST(training_data, n_trees, max_features, min_samples_split)
+    forest = []
+    
+    for i = 1 to n_trees do
+        # Create bootstrap sample of size N from training data
+        bootstrap_sample = SAMPLE_WITH_REPLACEMENT(training_data, N)
+        
+        # Train a decision tree on the bootstrap sample
+        tree = DECISION_TREE()
+        
+        # Recursively build the tree
+        BUILD_TREE(tree, bootstrap_sample, max_features, min_samples_split)
+        
+        # Add the tree to our forest
+        forest.append(tree)
+    end for
+    
+    return forest
+
+BUILD_TREE(tree, data, max_features, min_samples_split)
+    if stopping_criteria_met(data, min_samples_split) then
+        return LEAF_NODE(majority_class_or_average_value(data))
+    end if
+    
+    # Consider only a random subset of features at this node
+    feature_subset = RANDOM_SUBSET(all_features, max_features)
+    
+    # Find the best feature and split point among the subset
+    best_feature, best_split = FIND_BEST_SPLIT(data, feature_subset)
+    
+    # Split the data
+    left_data, right_data = SPLIT_DATA(data, best_feature, best_split)
+    
+    # Recursively build left and right subtrees
+    left_subtree = BUILD_TREE(tree, left_data, max_features, min_samples_split)
+    right_subtree = BUILD_TREE(tree, right_data, max_features, min_samples_split)
+    
+    return INTERNAL_NODE(best_feature, best_split, left_subtree, right_subtree)
+
+PREDICT(forest, sample)
+    predictions = []
+    
+    for each tree in forest do
+        # Get prediction from each tree
+        prediction = TREE_PREDICT(tree, sample)
+        predictions.append(prediction)
+    end for
+    
+    # For classification: return majority vote
+    # For regression: return average
+    if classification_task then
+        return MODE(predictions)
+    else
+        return MEAN(predictions)
+    end if
+```
+
 **Advantages:**
 - Robust to overfitting compared to individual decision trees
 - Handles high-dimensional data well
@@ -69,6 +128,68 @@ AdaBoost was one of the first successful boosting algorithms, which adjusts the 
 6. **Exponential Loss**: Optimizes exponential loss function
 7. **Hyperparameters**: Learning rate, number of estimators
 
+**Algorithm:**
+```
+ADABOOST(training_data, labels, n_estimators)
+    # Initialize weights uniformly
+    weights = [1/N, 1/N, ..., 1/N]  # N is the number of training examples
+    ensemble = []
+    alpha_values = []
+    
+    for m = 1 to n_estimators do
+        # Train weak learner (usually a decision stump) on weighted data
+        weak_learner = TRAIN_WEAK_LEARNER(training_data, labels, weights)
+        
+        # Get predictions from this weak learner
+        predictions = PREDICT(weak_learner, training_data)
+        
+        # Calculate weighted error
+        error = 0
+        for i = 1 to N do
+            if predictions[i] != labels[i] then
+                error = error + weights[i]
+            end if
+        end for
+        
+        # If error is too high (≥ 0.5), discard this model and terminate
+        if error >= 0.5 then
+            break
+        end if
+        
+        # Calculate model weight
+        alpha = 0.5 * ln((1 - error) / error)
+        
+        # Update instance weights
+        for i = 1 to N do
+            if predictions[i] == labels[i] then
+                weights[i] = weights[i] * exp(-alpha)
+            else
+                weights[i] = weights[i] * exp(alpha)
+            end if
+        end for
+        
+        # Normalize weights to sum to 1
+        weights = NORMALIZE(weights)
+        
+        # Add model to ensemble
+        ensemble.append(weak_learner)
+        alpha_values.append(alpha)
+    end for
+    
+    return ensemble, alpha_values
+
+PREDICT_ADABOOST(ensemble, alpha_values, sample)
+    final_score = 0
+    
+    for m = 1 to LENGTH(ensemble) do
+        prediction = PREDICT(ensemble[m], sample)  # Usually +1 or -1
+        final_score = final_score + (alpha_values[m] * prediction)
+    end for
+    
+    # Return sign of the final score
+    return SIGN(final_score)
+```
+
 **Mathematical Formulation:**
 - Final prediction: $F(x) = \sum_{m=1}^{M} \alpha_m h_m(x)$
 - Where $\alpha_m$ is the weight of the $m$-th model, and $h_m(x)$ is the prediction of the $m$-th model.
@@ -90,6 +211,48 @@ GBM builds on the boosting framework but uses gradient descent optimization to m
    - Learning rate (shrinkage)
    - Tree depth
    - Subsampling rate
+
+**Algorithm:**
+```
+GRADIENT_BOOSTING(training_data, labels, n_estimators, learning_rate, loss_function)
+    # Initialize with a constant value (for regression: mean of target values)
+    F_0(x) = arg min_γ Σ L(y_i, γ)
+    ensemble = [F_0]
+    
+    for m = 1 to n_estimators do
+        # Compute the negative gradient (pseudo-residuals)
+        for i = 1 to N do
+            r_im = -[∂L(y_i, F(x_i))/∂F(x_i)]_{F=F_{m-1}}
+        end for
+        
+        # Fit a regression tree to the negative gradient values
+        tree_m = FIT_REGRESSION_TREE(training_data, pseudo_residuals)
+        
+        # Find the optimal leaf node predictions by solving
+        # γ_jm = arg min_γ Σ_{x_i∈R_jm} L(y_i, F_{m-1}(x_i) + γ)
+        # for each leaf region R_jm in the tree
+        OPTIMIZE_LEAF_VALUES(tree_m, training_data, labels, F_{m-1}, loss_function)
+        
+        # Update the model with a shrunken version of the new tree
+        F_m(x) = F_{m-1}(x) + learning_rate * tree_m(x)
+        
+        # Add the tree to the ensemble
+        ensemble.append(tree_m)
+    end for
+    
+    return ensemble
+
+PREDICT_GBM(ensemble, learning_rate, sample)
+    # Start with the initial prediction
+    prediction = ensemble[0](sample)
+    
+    # Add the contribution of each tree
+    for m = 1 to LENGTH(ensemble) - 1 do
+        prediction = prediction + learning_rate * ensemble[m](sample)
+    end for
+    
+    return prediction
+```
 
 **Mathematical Formulation:**
 - Initialize: $F_0(x) = \arg\min_\gamma \sum_{i=1}^{n} L(y_i, \gamma)$

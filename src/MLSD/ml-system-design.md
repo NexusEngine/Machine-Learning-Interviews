@@ -216,10 +216,12 @@ Note: Remember when using this design flow during an interview to be flexible. A
     - Text: Tokenize (Normalize, pre-tokenize, tokenizer model (ch/word/subword level), post-process (add special tokens))
     - Images: Resize, normalize
     - Video: Decode frames, sample, resize, scale and normalize
-- Missing Values
-- Feature importance
-- Featurizer (raw data -> features)
-- Static (from feature store) vs dynamic (computed online) features
+  - Missing Values
+  - Feature importance
+  - Featurizer (raw data -> features)
+  - Static (from feature store) vs dynamic (computed online) features
+  - Feature store
+
 
 ## 6. Model Development and Offline Evaluation
 
@@ -265,17 +267,17 @@ Note: Remember when using this design flow during an interview to be flexible. A
     - Portions
     - Splitting time-correlated data (split by time)
       - seasonality, trend
-    - Data leakage:
+    - [Data leakage](./mlsd-data-leakage.md):
       - scale after split,
       - use only train split for stats, scaling, and missing vals
   - Class Imbalance
-
+    - [Data Imbalance](./mlsd-data-imbalance.md)
     - Resampling
     - weighted loss fcn
     - combining classes
 - Model training
 
-  - Loss functions
+  - [Loss functions](../loss_functions.md)
 
     - MSE
     - Binary/Categorical CE
@@ -283,7 +285,7 @@ Note: Remember when using this design flow during an interview to be flexible. A
     - Huber loss
     - Hinge loss
     - Contrastive loss, etc
-  - Optimizers
+  - [Optimizers](../optimization_methods.md)
 
     - SGD, AdaGrad, RMSProp, Adam, etc
   - Model training
@@ -326,7 +328,7 @@ Note: Remember when using this design flow during an interview to be flexible. A
 
 ## 8. Online Testing and Model Deployment
 
-- A/B Experiments
+- A/B Experiments ([detailed explanation](./mlsd-ab-testing.md))
   - How to A/B test?
     - what portion of users?
     - control and test groups

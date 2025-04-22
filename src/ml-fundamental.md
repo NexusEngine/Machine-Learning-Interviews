@@ -50,20 +50,22 @@ Below are the most important topics to cover:
   - Comparison of different algorithms
     - [TBD: LinkedIn lecture]
 
-  - Optimization
+  - Optimization ([detailed explanation](./optimization_methods.md))
     - Gradient descent (concept, formula, code)
     - Other variations of gradient descent
       - SGD
       - Momentum
       - RMSprop
       - ADAM
-  - Loss functions
+
+  - Loss functions ([detailed explanation](./loss_functions.md))
     - Logistic Loss function 
     - Cross Entropy (remember formula as well)
     - Hinge loss (SVM)
 
-- Feature selection
+- Feature selection ([detailed explanation](./feature_selection.md))
   - Feature importance
+
 - Model evaluation and selection
   - Evaluation metrics
     - TP, FP, TN, FN
@@ -79,7 +81,7 @@ Below are the most important topics to cover:
     - Cross validation
       - k-fold cross validation (what's a good k value?)
 
-### Unsupervised learning
+### Unsupervised learning ([detailed explanation](./unsupervised_learning.md))
   - Clustering
     - Centroid models: k-means clustering
     - Connectivity models: Hierarchical clustering
@@ -93,6 +95,7 @@ Below are the most important topics to cover:
   - Dimension reduction techniques
     - Principal Component Analysis (PCA)
     - Independent Component Analysis (ICA)
+    - LDA
     - T-sne
 
 
@@ -146,7 +149,7 @@ Below are the most important topics to cover:
   - Similarity/dissimilarity metrics
     - Euclidean, Manhattan, Cosine, Mahalanobis (advanced)
 
-# 3. ML Fundamentals Sample Questions 
+# ML Fundamentals Sample Questions 
 - What is machine learning and how does it differ from traditional programming?
 - What are different types of machine learning techniques?
 - What is the difference between supervised and unsupervised learning?
